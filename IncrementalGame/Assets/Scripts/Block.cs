@@ -30,35 +30,22 @@ public class Block : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (damageTimerRunning)
-        {
-            if (damageTimeRemaining > 0)
-            {
-                damageTimeRemaining -= Time.deltaTime;
-            }
-            else
-            {
-                damageTimerRunning = false;
-            }
-        }
-
-        if (health <= 0)
-        {
-            player.KilledBlock(this);
-            Destroy(this.gameObject);
-        }
     }
 
     private void FixedUpdate()
     {
         if (colliding)
         {
-            if (!damageTimerRunning)
+            if (player.CanAttack())
             {
                 health -= player.GetDamage();
                 Debug.Log("Block attacked, health: " + health);
-                damageTimeRemaining = damageTime;
-                damageTimerRunning = true;
+                player.Attacked();
+                if (health <= 0)
+                {
+                    player.KilledBlock(this);
+                    Destroy(this.gameObject);
+                }
             }
         }
     }

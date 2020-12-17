@@ -46,6 +46,10 @@ public class Player : MonoBehaviour
     [Header("Money")]
     private int Money = 0;
 
+    private float damageTimeRemaining = -1.0f;
+
+    private bool damageTimerRunning = false;
+
     //   private 2Dbox
     // Start is called before the first frame update
     private void Start()
@@ -77,6 +81,17 @@ public class Player : MonoBehaviour
         return finalAttackSpeed;
     }
 
+    public bool CanAttack()
+    {
+        return !damageTimerRunning;
+    }
+
+    public void Attacked()
+    {
+        damageTimeRemaining = GetAttackSpeed();
+        damageTimerRunning = true;
+    }
+
     /// <summary>
     /// This will handle the rewards for the player killing enemy.
     /// </summary>
@@ -88,6 +103,23 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
+    {
+        MovePlayer();
+
+        if (damageTimerRunning)
+        {
+            if (damageTimeRemaining > 0)
+            {
+                damageTimeRemaining -= Time.deltaTime;
+            }
+            else
+            {
+                damageTimerRunning = false;
+            }
+        }
+    }
+
+    private void MovePlayer()
     {
         Vector2 pos = transform.position;
         Vector3 temp = Input.mousePosition;
