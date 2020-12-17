@@ -4,26 +4,48 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    [SerializeField]
+    private float health = 5.0f;
 
-    public float health = 100f;
     private float type;
 
     private bool colliding = false;
 
     private Player player;
 
+    // Represents the time between attacks from the player.
+    private float damageTime;
+
+    private float damageTimeRemaining = -1.0f;
+
+    private bool damageTimerRunning = false;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();   
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        damageTime = player.GetAttackSpeed();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (damageTimerRunning)
+        {
+            if (damageTimeRemaining > 0)
+            {
+                damageTimeRemaining -= Time.deltaTime;
+            }
+            else
+            {
+                damageTimerRunning = false;
+            }
+        }
+
         if (health <= 0)
         {
-            Destroy(this);
+            player.KilledBlock(this);
+            Destroy(this.gameObject);
         }
     }
 
@@ -31,7 +53,13 @@ public class Block : MonoBehaviour
     {
         if (colliding)
         {
-            health -= player.damage / 50f;
+            if (!damageTimerRunning)
+            {
+                health -= player.GetDamage();
+                Debug.Log("Block attacked, health: " + health);
+                damageTimeRemaining = damageTime;
+                damageTimerRunning = true;
+            }
         }
     }
 
