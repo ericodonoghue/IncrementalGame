@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private 2Dbox
+    public float damage = 5;
+ //   private 2Dbox
     // Start is called before the first frame update
     void Start()
     {
@@ -13,5 +14,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 pos = transform.position;
+        if (true || pos.x < 13 && pos.x > -13)
+        {
+            Vector3 temp = Input.mousePosition;
+            temp.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.
+            this.transform.position = Camera.main.ScreenToWorldPoint(temp);
+        }
     }
 }
