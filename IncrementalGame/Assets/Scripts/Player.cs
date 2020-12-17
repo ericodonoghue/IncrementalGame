@@ -42,10 +42,19 @@ public class Player : MonoBehaviour
 
     private bool attackSpeedUpdated = true;
 
+    [SerializeField]
+    [Header("Money")]
+    private int Money = 0;
+
     //   private 2Dbox
     // Start is called before the first frame update
     private void Start()
     {
+    }
+
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     public float GetDamage()
@@ -74,17 +83,17 @@ public class Player : MonoBehaviour
     /// <param name="block"></param>
     public void KilledBlock(Block block)
     {
+        Money++;
     }
 
     // Update is called once per frame
     private void Update()
     {
         Vector2 pos = transform.position;
-        if (true || pos.x < 13 && pos.x > -13)
-        {
-            Vector3 temp = Input.mousePosition;
-            temp.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.
-            this.transform.position = Camera.main.ScreenToWorldPoint(temp);
-        }
+        Vector3 temp = Input.mousePosition;
+        temp.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(temp);
+
+        this.transform.position = mousePos;
     }
 }

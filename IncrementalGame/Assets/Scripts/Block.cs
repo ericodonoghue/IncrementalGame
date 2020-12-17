@@ -7,7 +7,7 @@ public class Block : MonoBehaviour
     [SerializeField]
     private float health = 5.0f;
 
-    private float type;
+    private string blockType;
 
     private bool colliding = false;
 
